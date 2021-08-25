@@ -21,12 +21,9 @@ import (
 	"github.com/go-logr/logr"
 
 	chv1 "github.com/open-cluster-management/multicloud-operators-channel/pkg/apis/apps/v1"
-	helmsync "github.com/open-cluster-management/multicloud-operators-channel/pkg/synchronizer/helmreposynchronizer"
 	"github.com/open-cluster-management/multicloud-operators-channel/pkg/utils"
-	dplv1 "github.com/open-cluster-management/multicloud-operators-deployable/pkg/apis/apps/v1"
 
 	"k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/tools/record"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -50,7 +47,7 @@ const (
 // Add creates a new Deployable Controller and adds it to the Manager with default RBAC. The Manager will set fields on the Controller
 // and Start it when the Manager is Started.
 func Add(mgr manager.Manager, dynamicClient dynamic.Interface, recorder record.EventRecorder, logger logr.Logger,
-	channelDescriptor *utils.ChannelDescriptor, sync *helmsync.ChannelSynchronizer) error {
+	channelDescriptor *utils.ChannelDescriptor) error {
 	return add(mgr, newReconciler(mgr, channelDescriptor, logger.WithName(controllerName)), logger.WithName(controllerSetup))
 }
 
@@ -68,23 +65,6 @@ type channelMapper struct {
 	logger logr.Logger
 }
 
-func (mapper *channelMapper) Map(obj client.Object) []reconcile.Request {
-	dpllist := &dplv1.DeployableList{}
-
-	err := mapper.List(context.TODO(), dpllist, client.InNamespace(obj.GetNamespace()))
-	if err != nil {
-		mapper.logger.Error(err, "failed to list all deployable")
-		return nil
-	}
-
-	var requests []reconcile.Request
-	for _, dpl := range dpllist.Items {
-		requests = append(requests, reconcile.Request{NamespacedName: types.NamespacedName{Name: dpl.GetName(), Namespace: dpl.GetNamespace()}})
-	}
-
-	return requests
-}
-
 // add adds a new Controller to mgr with r as the reconcile.Reconciler
 func add(mgr manager.Manager, r reconcile.Reconciler, logger logr.Logger) error {
 	// Create a new controller
@@ -93,18 +73,13 @@ func add(mgr manager.Manager, r reconcile.Reconciler, logger logr.Logger) error 
 		return err
 	}
 
-	// Watch for changes to Deployable
-	err = c.Watch(&source.Kind{Type: &dplv1.Deployable{}}, &handler.EnqueueRequestForObject{})
+	// Watch for changes to Channels
+	err = c.Watch(&source.Kind{Type: &chv1.Channel{}}, &handler.EnqueueRequestForObject{})
 	if err != nil {
 		return err
 	}
 
-	// watch for changes to channel too
-	cmapper := &channelMapper{Client: mgr.GetClient(), logger: logger}
-
-	return c.Watch(&source.Kind{
-		Type: &chv1.Channel{}},
-		handler.EnqueueRequestsFromMapFunc(cmapper.Map))
+	return err
 }
 
 var _ reconcile.Reconciler = &ReconcileDeployable{}
@@ -131,26 +106,16 @@ func (r *ReconcileDeployable) Reconcile(ctx context.Context, request reconcile.R
 
 	defer log.Info(fmt.Sprintf("Finish %v reconcile loop for %v", controllerName, request.NamespacedName))
 
-	instance := &dplv1.Deployable{}
+	instance := &chv1.Channel{}
 	err := r.KubeClient.Get(context.TODO(), request.NamespacedName, instance)
 
 	if err != nil {
 		if errors.IsNotFound(err) {
-			if err := r.deleteDeployableInObjectBucket(request.NamespacedName, log); err != nil {
-				log.Error(err, fmt.Sprintf("failed to delete deployable %v", request.NamespacedName))
-				return reconcile.Result{}, err
-			}
-
 			return reconcile.Result{}, nil
 		}
 		// Error reading the object - requeue the request.
 		log.Error(err, "Reconciling - Errored.")
 
-		return reconcile.Result{}, err
-	}
-
-	if err := r.createOrUpdateDeployableInObjectBucket(instance, log); err != nil {
-		log.Error(err, fmt.Sprintf("failed to reconcile deployable for channel %v", request.String()))
 		return reconcile.Result{}, err
 	}
 

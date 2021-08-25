@@ -45,8 +45,6 @@ import (
 	"github.com/open-cluster-management/multicloud-operators-channel/pkg/utils"
 	chWebhook "github.com/open-cluster-management/multicloud-operators-channel/pkg/webhook"
 
-	helmsync "github.com/open-cluster-management/multicloud-operators-channel/pkg/synchronizer/helmreposynchronizer"
-	objsync "github.com/open-cluster-management/multicloud-operators-channel/pkg/synchronizer/objectstoresynchronizer"
 	placementutils "github.com/open-cluster-management/multicloud-operators-placementrule/pkg/utils"
 )
 
@@ -128,34 +126,6 @@ func RunManager() {
 		os.Exit(exitCode)
 	}
 
-	//Create channel synchronizer
-	osync, err := objsync.CreateObjectStoreSynchronizer(cfg, chdesc, options.SyncInterval)
-
-	if err != nil {
-		logger.Error(err, "unable to create object-store syncrhonizer on destination cluster.")
-		os.Exit(exitCode)
-	}
-
-	err = mgr.Add(osync)
-	if err != nil {
-		logger.Error(err, "Failed to register synchronizer.")
-		os.Exit(exitCode)
-	}
-
-	// Create channel synchronizer for helm repo
-	hsync, err := helmsync.CreateHelmrepoSynchronizer(cfg, mgr.GetScheme(), options.SyncInterval)
-
-	if err != nil {
-		logger.Error(err, "unable to create helo-repo syncrhonizer on destination cluster.")
-		os.Exit(exitCode)
-	}
-
-	err = mgr.Add(hsync)
-	if err != nil {
-		logger.Error(err, "Failed to register synchronizer.")
-		os.Exit(exitCode)
-	}
-
 	logger.Info("Registering Components.")
 
 	// Setup Scheme for all resources
@@ -181,7 +151,7 @@ func RunManager() {
 	// Setup all Controllers
 	logger.Info("Setting up controller")
 
-	if err := controller.AddToManager(mgr, dynamicClient, recorder, logf.Log.WithName("controllers"), chdesc, hsync); err != nil {
+	if err := controller.AddToManager(mgr, dynamicClient, recorder, logf.Log.WithName("controllers"), chdesc); err != nil {
 		logger.Error(err, "unable to register controllers to the manager")
 		os.Exit(exitCode)
 	}

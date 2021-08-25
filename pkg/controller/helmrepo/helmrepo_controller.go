@@ -22,7 +22,6 @@ import (
 	"github.com/go-logr/logr"
 
 	chv1 "github.com/open-cluster-management/multicloud-operators-channel/pkg/apis/apps/v1"
-	helmsync "github.com/open-cluster-management/multicloud-operators-channel/pkg/synchronizer/helmreposynchronizer"
 	"github.com/open-cluster-management/multicloud-operators-channel/pkg/utils"
 
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -50,16 +49,15 @@ const (
 // Add creates a new Deployable Controller and adds it to the Manager with default RBAC. The Manager will set fields on the Controller
 // and Start it when the Manager is Started.
 func Add(mgr manager.Manager, dynamicClient dynamic.Interface, recorder record.EventRecorder, logger logr.Logger,
-	channelDescriptor *utils.ChannelDescriptor, sync *helmsync.ChannelSynchronizer) error {
-	return add(mgr, newReconciler(mgr, sync, logger.WithName(controllerName)), logger.WithName(controllerSetup))
+	channelDescriptor *utils.ChannelDescriptor) error {
+	return add(mgr, newReconciler(mgr, logger.WithName(controllerName)), logger.WithName(controllerSetup))
 }
 
 // newReconciler returns a new reconcile.Reconciler
-func newReconciler(mgr manager.Manager, sync *helmsync.ChannelSynchronizer, logger logr.Logger) reconcile.Reconciler {
+func newReconciler(mgr manager.Manager, logger logr.Logger) reconcile.Reconciler {
 	return &ReconcileChannel{
-		KubeClient:          mgr.GetClient(),
-		ChannelSynchronizer: sync,
-		Log:                 logger,
+		KubeClient: mgr.GetClient(),
+		Log:        logger,
 	}
 }
 
@@ -85,9 +83,8 @@ var _ reconcile.Reconciler = &ReconcileChannel{}
 
 // ReconcileChannel reconciles a Deployable object
 type ReconcileChannel struct {
-	KubeClient          client.Client
-	ChannelSynchronizer *helmsync.ChannelSynchronizer
-	Log                 logr.Logger
+	KubeClient client.Client
+	Log        logr.Logger
 }
 
 // Reconcile reads that state of the cluster for a Deployable object and makes changes based on the state read
@@ -111,7 +108,6 @@ func (r *ReconcileChannel) Reconcile(ctx context.Context, request reconcile.Requ
 		if errors.IsNotFound(err) {
 			// Object not found, return.  Created objects are automatically garbage collected.
 			// For additional cleanup logic use finalizers.
-			delete(r.ChannelSynchronizer.ChannelMap, request.NamespacedName)
 			return reconcile.Result{}, nil
 		}
 		// Error reading the object - requeue the request.
@@ -124,13 +120,6 @@ func (r *ReconcileChannel) Reconcile(ctx context.Context, request reconcile.Requ
 		log.Info(fmt.Sprintf("Ignoring type %v", instance.Spec.Type))
 		return reconcile.Result{}, nil
 	}
-
-	if len(instance.GetFinalizers()) > 0 {
-		delete(r.ChannelSynchronizer.ChannelMap, request.NamespacedName)
-		return reconcile.Result{}, nil
-	}
-
-	r.ChannelSynchronizer.ChannelMap[request.NamespacedName] = instance
 
 	return reconcile.Result{}, nil
 }

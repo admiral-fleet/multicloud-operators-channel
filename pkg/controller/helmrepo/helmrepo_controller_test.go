@@ -28,7 +28,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
 	chv1 "github.com/open-cluster-management/multicloud-operators-channel/pkg/apis/apps/v1"
-	synchronizer "github.com/open-cluster-management/multicloud-operators-channel/pkg/synchronizer/helmreposynchronizer"
 )
 
 var c client.Client
@@ -67,7 +66,7 @@ func TestHelmRepoReconcile(t *testing.T) {
 
 	c = mgr.GetClient()
 
-	recFn, requests := SetupTestReconcile(newReconciler(mgr, &synchronizer.ChannelSynchronizer{}, logr.DiscardLogger{}))
+	recFn, requests := SetupTestReconcile(newReconciler(mgr, logr.DiscardLogger{}))
 	g.Expect(add(mgr, recFn, logr.DiscardLogger{})).NotTo(gomega.HaveOccurred())
 
 	ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Minute)
