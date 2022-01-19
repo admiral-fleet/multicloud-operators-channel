@@ -1,5 +1,7 @@
 # multicloud-operators-channel 
 
+RANDOM CHANGE
+
 [![Build](https://travis-ci.com/open-cluster-management/multicloud-operators-channel.svg?branch=main)](https://travis-ci.com/open-cluster-management/multicloud-operators-channel.svg?branch=main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mikeshng/multicloud-operators-channel)](https://goreportcard.com/report/github.com/mikeshng/multicloud-operators-channel)
 [![GoDoc](https://godoc.org/github.com/mikeshng/multicloud-operators-channel?status.svg)](https://godoc.org/github.com/mikeshng/multicloud-operators-channel?status.svg)
