@@ -21,9 +21,9 @@ import (
 
 	"github.com/go-logr/logr"
 
-	chv1 "github.com/open-cluster-management/multicloud-operators-channel/pkg/apis/apps/v1"
-	helmsync "github.com/open-cluster-management/multicloud-operators-channel/pkg/synchronizer/helmreposynchronizer"
-	"github.com/open-cluster-management/multicloud-operators-channel/pkg/utils"
+	chv1 "github.com/mikeshng/multicloud-operators-channel/pkg/apis/apps/v1"
+	helmsync "github.com/mikeshng/multicloud-operators-channel/pkg/synchronizer/helmreposynchronizer"
+	"github.com/mikeshng/multicloud-operators-channel/pkg/utils"
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/client-go/dynamic"

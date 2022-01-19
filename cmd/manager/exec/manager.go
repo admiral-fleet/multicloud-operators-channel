@@ -38,15 +38,15 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
 
-	chv1 "github.com/open-cluster-management/multicloud-operators-channel/pkg/apis/apps/v1"
+	chv1 "github.com/mikeshng/multicloud-operators-channel/pkg/apis/apps/v1"
 
-	"github.com/open-cluster-management/multicloud-operators-channel/pkg/apis"
-	"github.com/open-cluster-management/multicloud-operators-channel/pkg/controller"
-	"github.com/open-cluster-management/multicloud-operators-channel/pkg/utils"
-	chWebhook "github.com/open-cluster-management/multicloud-operators-channel/pkg/webhook"
+	"github.com/mikeshng/multicloud-operators-channel/pkg/apis"
+	"github.com/mikeshng/multicloud-operators-channel/pkg/controller"
+	"github.com/mikeshng/multicloud-operators-channel/pkg/utils"
+	chWebhook "github.com/mikeshng/multicloud-operators-channel/pkg/webhook"
 
-	helmsync "github.com/open-cluster-management/multicloud-operators-channel/pkg/synchronizer/helmreposynchronizer"
-	objsync "github.com/open-cluster-management/multicloud-operators-channel/pkg/synchronizer/objectstoresynchronizer"
+	helmsync "github.com/mikeshng/multicloud-operators-channel/pkg/synchronizer/helmreposynchronizer"
+	objsync "github.com/mikeshng/multicloud-operators-channel/pkg/synchronizer/objectstoresynchronizer"
 	placementutils "github.com/open-cluster-management/multicloud-operators-placementrule/pkg/utils"
 )
 
