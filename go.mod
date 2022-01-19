@@ -1,4 +1,4 @@
-module github.com/open-cluster-management/multicloud-operators-channel
+module github.com/mikeshng/multicloud-operators-channel
 
 go 1.17
 

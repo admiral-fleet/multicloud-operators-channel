@@ -1,8 +1,8 @@
 # multicloud-operators-channel 
 
 [![Build](https://travis-ci.com/open-cluster-management/multicloud-operators-channel.svg?branch=main)](https://travis-ci.com/open-cluster-management/multicloud-operators-channel.svg?branch=main)
-[![Go Report Card](https://goreportcard.com/badge/github.com/open-cluster-management/multicloud-operators-channel)](https://goreportcard.com/report/github.com/open-cluster-management/multicloud-operators-channel)
-[![GoDoc](https://godoc.org/github.com/open-cluster-management/multicloud-operators-channel?status.svg)](https://godoc.org/github.com/open-cluster-management/multicloud-operators-channel?status.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/mikeshng/multicloud-operators-channel)](https://goreportcard.com/report/github.com/mikeshng/multicloud-operators-channel)
+[![GoDoc](https://godoc.org/github.com/mikeshng/multicloud-operators-channel?status.svg)](https://godoc.org/github.com/mikeshng/multicloud-operators-channel?status.svg)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=open-cluster-management_multicloud-operators-channel&metric=coverage)](https://sonarcloud.io/api/project_badges/measure?project=open-cluster-management_multicloud-operators-channel&metric=coverage)
 [![License](https://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
@@ -44,9 +44,9 @@ The following example is tested on a minikube, so that you can play with this op
 
 % cd "$GOPATH"/src/github.com/open-cluster-management
 
-% git clone https://github.com/open-cluster-management/multicloud-operators-channel.git
+% git clone https://github.com/mikeshng/multicloud-operators-channel.git
 
-% cd "$GOPATH"/src/github.com/open-cluster-management/multicloud-operators-channel
+% cd "$GOPATH"/src/github.com/mikeshng/multicloud-operators-channel
 ```
 
 - Setup environment and deploy channel operator
@@ -188,7 +188,7 @@ Check the [Security Doc](SECURITY.md) if you've found a security issue.
 ### multicloud-operators repositories 
 
 - [multicloud-operators-application](https://github.com/open-cluster-management/multicloud-operators-application)
-- [multicloud-operators-channel](https://github.com/open-cluster-management/multicloud-operators-channel)
+- [multicloud-operators-channel](https://github.com/mikeshng/multicloud-operators-channel)
 - [multicloud-operators-deployable](https://github.com/open-cluster-management/multicloud-operators-deployable)
 - [multicloud-operators-placementrule](https://github.com/open-cluster-management/multicloud-operators-placementrule)
 - [multicloud-operators-subscription](https://github.com/open-cluster-management/multicloud-operators-subscription)

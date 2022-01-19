@@ -20,10 +20,10 @@ import (
 	"reflect"
 	"strings"
 
+	chv1 "github.com/mikeshng/multicloud-operators-channel/pkg/apis/apps/v1"
+	helmsync "github.com/mikeshng/multicloud-operators-channel/pkg/synchronizer/helmreposynchronizer"
+	"github.com/mikeshng/multicloud-operators-channel/pkg/utils"
 	spokeClusterV1 "github.com/open-cluster-management/api/cluster/v1"
-	chv1 "github.com/open-cluster-management/multicloud-operators-channel/pkg/apis/apps/v1"
-	helmsync "github.com/open-cluster-management/multicloud-operators-channel/pkg/synchronizer/helmreposynchronizer"
-	"github.com/open-cluster-management/multicloud-operators-channel/pkg/utils"
 	dplv1 "github.com/open-cluster-management/multicloud-operators-deployable/pkg/apis/apps/v1"
 	dplutils "github.com/open-cluster-management/multicloud-operators-deployable/pkg/utils"
 	placementutils "github.com/open-cluster-management/multicloud-operators-placementrule/pkg/utils"
