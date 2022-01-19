@@ -26,7 +26,7 @@ import (
 
 	"github.com/go-logr/logr"
 
-	chv1 "github.com/open-cluster-management/multicloud-operators-channel/pkg/apis/apps/v1"
+	chv1 "github.com/mikeshng/multicloud-operators-channel/pkg/apis/apps/v1"
 )
 
 type ChannelValidator struct {
